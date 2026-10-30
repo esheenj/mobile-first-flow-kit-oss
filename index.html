@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="color-scheme" content="light dark">
+  <title>Mobile-first flow kit — synthetic journey demo</title>
+  <style>
+    :root { font-family: system-ui, sans-serif; color-scheme: light dark; --gap: clamp(1rem,3vw,2rem); }
+    * { box-sizing: border-box; }
+    body { margin:0; background: Canvas; color:CanvasText; line-height:1.55; }
+    header { padding:1.2rem max(1rem,env(safe-area-inset-right)) 1.2rem max(1rem,env(safe-area-inset-left)); border-bottom:1px solid color-mix(in srgb,CanvasText 20%,transparent); }
+    header p { max-width:62ch; margin:.3rem 0 0; }
+    .shell { max-width:1100px; margin:auto; padding:var(--gap); display:grid; gap:var(--gap); }
+    .context { border:1px solid currentColor; border-radius:1rem; padding:var(--gap); opacity:.9; }
+    main { min-width:0; border:1px solid color-mix(in srgb,CanvasText 30%,transparent); border-radius:1rem; padding:var(--gap); }
+    h1 { font-size:clamp(1.35rem,3vw,2rem); margin:0; }
+    h2 { margin-top:0; font-size:clamp(1.2rem,2vw,1.5rem); }
+    h2:focus { outline:none; }
+    h2:focus-visible { outline:3px solid Highlight; outline-offset:5px; }
+    .choices { display:grid; gap:.75rem; margin:1rem 0; }
+    .choice { display:flex; align-items:center; gap:.75rem; border:1px solid; padding:.85rem; border-radius:.7rem; min-height:48px; }
+    input[type="radio"] { min-width:22px; min-height:22px; }
+    input[type="text"] { width:100%; max-width:34rem; border:1px solid; border-radius:.5rem; padding:.9rem; font:inherit; }
+    button { min-height:48px; padding:.65rem 1.2rem; border-radius:.6rem; border:1px solid; font:inherit; cursor:pointer; }
+    button.primary { background:#174ea6; color:#fff; border-color:#174ea6; }
+    @media (forced-colors:active) { button.primary { background:ButtonFace; color:ButtonText; border-color:ButtonText; } }
+    button:focus-visible,input:focus-visible,.choice:focus-within { outline:3px solid Highlight; outline-offset:2px; }
+    .actions { display:flex; gap:.75rem; justify-content:flex-end; flex-wrap:wrap; margin-top:1.5rem; }
+    #error { min-height:1.7em; color:color-mix(in srgb,CanvasText 90%,red); font-weight:650; }
+    .review { border-inline-start:4px solid Highlight; padding-inline-start:1rem; }
+    [hidden] { display:none !important; }
+    @media (min-width:740px) { .shell { grid-template-columns:minmax(220px,1fr) minmax(0,2fr); align-items:start; } .context { position:sticky; top:1rem; } }
+    @media (max-width:360px) { .actions { flex-direction:column-reverse; } .actions button { width:100%; } }
+    @media (prefers-reduced-motion:no-preference) { button { transition:filter .15s ease; } button:hover { filter:brightness(.9); } }
+  </style>
+</head>
+<body>
+  <header><h1>Mobile-first flow kit</h1><p>Offline, synthetic three-step journey. Resize from narrow portrait to wide landscape to observe adaptive layout and controls.</p></header>
+  <div class="shell">
+    <aside class="context" aria-label="Journey guidance"><strong>Interaction principles</strong><p>One primary decision per step. Clear error recovery, persistent progress and large touch targets.</p><p>No data is uploaded or stored. Reloading resets this demo.</p></aside>
+    <main id="demo">
+      <p id="progress" role="status" aria-live="polite">Step 1 of 3</p>
+      <section data-panel="0"><h2 tabindex="-1">Choose a journey</h2><fieldset><legend>Example templates</legend>
+        <div class="choices">
+          <label class="choice"><input type="radio" name="template" value="signup"> Sign-up flow</label>
+          <label class="choice"><input type="radio" name="template" value="booking"> Booking flow</label>
+          <label class="choice"><input type="radio" name="template" value="feedback"> Feedback flow</label>
+        </div></fieldset></section>
+      <section data-panel="1" hidden><h2 tabindex="-1">Name your journey</h2><label for="journey-label">Journey label</label><p id="label-hint">Enter 3–50 characters.</p>
+        <input id="journey-label" type="text" autocomplete="off" maxlength="50" aria-describedby="label-hint"></section>
+      <section data-panel="2" hidden><h2 tabindex="-1">Review the details</h2><div class="review"><p><strong>Template:</strong> <span id="selected-template">None</span></p><p><strong>Label:</strong> <span id="selected-label">None</span></p></div><p>Finish only records local progress within this page.</p></section>
+      <section data-panel="3" hidden><h2 tabindex="-1">Journey complete</h2><p>Your sample flow is finished. No network request was sent.</p></section>
+      <p id="error" role="alert" aria-live="assertive"></p>
+      <div class="actions"><button id="back" type="button" hidden>Back</button><button id="next" class="primary" type="button">Continue</button><button id="restart" type="button" hidden>Start again</button></div>
+    </main>
+  </div>
+  <script type="module" src="./src/app.mjs"></script>
+</body>
+</html>
+
+

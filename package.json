@@ -1,0 +1,17 @@
+{
+  "name": "@esheen-labs/mobile-first-flow-kit-oss",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "description": "Dependency-free responsive journey demo with bounded state transitions, validation and focus management.",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "test": "node --test",
+    "demo": "node examples/demo.mjs"
+  }
+}
+
+
