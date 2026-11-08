@@ -22,6 +22,12 @@ python3 -m http.server 8000 --bind 127.0.0.1
 
 Open http://127.0.0.1:8000 on the same computer. No npm install is required. The package is source-only; private:true prevents accidental registry publishing.
 
+## Run the actual browser MVP and contribute
+
+The fictional journey in `index.html` now has an **exact-source GitHub Pages artifact**: `node scripts/stage_pages.mjs dist/pages` stages only the HTML and two ESM modules, and the CI checks the staged site through real Chrome at 320–1440px. No private source, account or backend is deployed. [Pages setup and actual HTTPS acceptance](docs/PAGES_RELEASE.md) are required before a live URL is advertised.
+
+For a first contribution, try a bounded [regression or keyboard task](docs/GOOD_FIRST_ISSUES.md), and follow [CONTRIBUTING.md](CONTRIBUTING.md). The deployment-ready repository is **not yet a verified live website**.
+
 ## Features
 
 - Three-step journey: choose a template, name it, review and finish.
