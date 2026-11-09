@@ -1,5 +1,7 @@
 # Mobile-first Flow Kit
 
+**[Open the GitHub-deployed responsive fictional journey](https://esheenj.github.io/mobile-first-flow-kit-oss/)** — [GitHub Pages deployment](https://github.com/esheenj/mobile-first-flow-kit-oss/actions/runs/42483166769) succeeded on **9 November 2026**. Independent external HTTPS/browser verification is still pending; please report any rendering problems in GitHub Issues.
+
 [![Offline checks](https://github.com/esheenj/mobile-first-flow-kit-oss/actions/workflows/test.yml/badge.svg)](https://github.com/esheenj/mobile-first-flow-kit-oss/actions/workflows/test.yml)
 
 **Experimental source preview · MIT · zero runtime dependencies**
@@ -26,7 +28,7 @@ Open http://127.0.0.1:8000 on the same computer. No npm install is required. The
 
 The fictional journey in `index.html` now has an **exact-source GitHub Pages artifact**: `node scripts/stage_pages.mjs dist/pages` stages only the HTML and two ESM modules, and the CI checks the staged site through real Chrome at 320–1440px. No private source, account or backend is deployed. [Pages setup and actual HTTPS acceptance](docs/PAGES_RELEASE.md) are required before a live URL is advertised.
 
-For a first contribution, try a bounded [regression or keyboard task](docs/GOOD_FIRST_ISSUES.md), and follow [CONTRIBUTING.md](CONTRIBUTING.md). The deployment-ready repository is **not yet a verified live website**.
+For a first contribution, try a bounded [regression or keyboard task](docs/GOOD_FIRST_ISSUES.md), and follow [CONTRIBUTING.md](CONTRIBUTING.md). GitHub Pages deployment is confirmed by Actions; independent external browser acceptance is still pending.
 
 ## Features
 
