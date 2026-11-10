@@ -134,5 +134,23 @@ class MobileFlowBrowserTests(unittest.TestCase):
         self.assertLessEqual(self.page.evaluate("document.documentElement.scrollWidth"),320)
         self.assertIn("connect-src 'none'",self.page.locator('meta[http-equiv="Content-Security-Policy"]').get_attribute("content"))
 
+
+    def test_offline_notification_lab_dismiss_snooze_restore(self):
+        self.page.goto(self.origin+"/notifications.html")
+        expect(self.page.locator("#status")).to_contain_text("3 visible")
+        self.assertEqual(self.page.locator("#notices li").count(),3)
+        self.page.get_by_role("button",name="Snooze visually · sample-warning").click()
+        expect(self.page.locator("#status")).to_contain_text("1 snoozed")
+        expect(self.page.locator("#status")).to_be_focused()
+        self.page.get_by_role("button",name="Dismiss · sample-alert").click()
+        expect(self.page.locator("#status")).to_contain_text("1 dismissed")
+        self.page.get_by_role("button",name="Restore · sample-alert").click()
+        expect(self.page.locator("#status")).to_contain_text("2 visible")
+        self.page.locator("#reset").click()
+        expect(self.page.locator("#status")).to_contain_text("3 visible")
+        self.page.set_viewport_size({"width":320,"height":720})
+        self.assertLessEqual(self.page.evaluate("document.documentElement.scrollWidth"),320)
+        self.assertIn("connect-src 'none'",self.page.locator('meta[http-equiv="Content-Security-Policy"]').get_attribute("content"))
+
 if __name__=="__main__":
     unittest.main(verbosity=2)
