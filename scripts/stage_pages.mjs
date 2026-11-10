@@ -4,7 +4,7 @@ import {resolve,dirname,join,sep} from "node:path";
 import {fileURLToPath} from "node:url";
 import {createHash} from "node:crypto";
 const ROOT=fileURLToPath(new URL("../",import.meta.url));
-const FILES=Object.freeze(["index.html","recovery.html","src/app.mjs","src/flow.mjs","src/recovery.mjs","src/recovery-ui.mjs"]);
+const FILES=Object.freeze(["index.html","notifications.html","recovery.html","src/app.mjs","src/flow.mjs","src/notifications.mjs","src/notification-ui.mjs","src/recovery.mjs","src/recovery-ui.mjs"]);
 const SCHEMA="public-mobile-flow-pages-v1";
 function fail(reason){throw Error("PUBLIC_PAGES_STAGE_"+reason);}
 async function checkedSource(root,relative){
@@ -54,6 +54,11 @@ export async function stagePages(destination){
   if(!recovery.includes("./src/recovery-ui.mjs")||!recoveryUI.includes("./recovery.mjs")||
      !index.includes("recovery.html")||!recovery.includes("connect-src 'none'"))
    fail("RECOVERY_LINK_OR_OFFLINE_POLICY");
+  const notifications=await readFile(join(out,"notifications.html"),"utf8");
+  const notificationUI=await readFile(join(out,"src/notification-ui.mjs"),"utf8");
+  if(!notifications.includes("./src/notification-ui.mjs")||!notificationUI.includes("./notifications.mjs")||
+     !index.includes("notifications.html")||!notifications.includes("connect-src 'none'"))
+    fail("NOTIFICATIONS_OFFLINE_LINK");
   const entries=[];
   for(const file of actual){
    const bytes=await readFile(join(out,file));
