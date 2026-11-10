@@ -107,5 +107,32 @@ class MobileFlowBrowserTests(unittest.TestCase):
                 self.assertEqual(metrics["main"],1)
                 self.assertTrue(metrics["controls"])
 
+
+    def test_hosted_recovery_scenario_and_bounded_retry(self):
+        self.page.goto(self.origin+"/recovery.html")
+        expect(self.page.locator("#phase")).to_have_text("Ready")
+        self.page.locator("#start").click()
+        expect(self.page.locator("#phase")).to_have_text("Operation pending")
+        self.page.locator("#fail").click()
+        expect(self.page.locator("#phase")).to_have_text("Recovery needed")
+        for attempt in (2,3):
+            self.page.locator("#retry").click()
+            expect(self.page.locator("#attempts")).to_contain_text("Attempt "+str(attempt)+" of 3")
+            self.page.locator("#fail").click()
+        expect(self.page.locator("#retry")).to_be_hidden()
+        expect(self.page.locator("#status")).to_contain_text("budget reached")
+        self.page.locator("#reset").click()
+        self.page.locator("#scenario").select_option("validation")
+        self.page.locator("#start").click()
+        self.page.locator("#fail").click()
+        expect(self.page.locator("#retry")).to_be_hidden()
+        expect(self.page.locator("#fix")).to_be_visible()
+        self.page.locator("#fix").click()
+        self.page.locator("#success").click()
+        expect(self.page.locator("#phase")).to_have_text("Recovered")
+        self.page.set_viewport_size({"width":320,"height":700})
+        self.assertLessEqual(self.page.evaluate("document.documentElement.scrollWidth"),320)
+        self.assertIn("connect-src 'none'",self.page.locator('meta[http-equiv="Content-Security-Policy"]').get_attribute("content"))
+
 if __name__=="__main__":
     unittest.main(verbosity=2)
