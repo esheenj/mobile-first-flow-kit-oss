@@ -4,7 +4,7 @@ import {resolve,dirname,join,sep} from "node:path";
 import {fileURLToPath} from "node:url";
 import {createHash} from "node:crypto";
 const ROOT=fileURLToPath(new URL("../",import.meta.url));
-const FILES=Object.freeze(["index.html","src/app.mjs","src/flow.mjs"]);
+const FILES=Object.freeze(["index.html","recovery.html","src/app.mjs","src/flow.mjs","src/recovery.mjs","src/recovery-ui.mjs"]);
 const SCHEMA="public-mobile-flow-pages-v1";
 function fail(reason){throw Error("PUBLIC_PAGES_STAGE_"+reason);}
 async function checkedSource(root,relative){
@@ -49,6 +49,11 @@ export async function stagePages(destination){
   const adapter=await readFile(join(out,"src/app.mjs"),"utf8");
   if(!index.includes("./src/app.mjs")||!adapter.includes("../src/flow.mjs"))
    fail("IMPORT_LINK_MISSING");
+  const recovery=await readFile(join(out,"recovery.html"),"utf8");
+  const recoveryUI=await readFile(join(out,"src/recovery-ui.mjs"),"utf8");
+  if(!recovery.includes("./src/recovery-ui.mjs")||!recoveryUI.includes("./recovery.mjs")||
+     !index.includes("recovery.html")||!recovery.includes("connect-src 'none'"))
+   fail("RECOVERY_LINK_OR_OFFLINE_POLICY");
   const entries=[];
   for(const file of actual){
    const bytes=await readFile(join(out,file));
