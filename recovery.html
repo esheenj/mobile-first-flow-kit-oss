@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'unsafe-inline'; connect-src 'none'; img-src 'none'; base-uri 'none'; form-action 'none'">
+<title>Error recovery playground · Esheen Labs</title>
+<meta name="description" content="Try offline synthetic network, validation, conflict and empty-result recovery paths.">
+<style>
+:root{font:16px/1.55 system-ui,sans-serif;color-scheme:light dark}
+*{box-sizing:border-box}
+body{margin:0;background:Canvas;color:CanvasText}
+main{max-width:54rem;padding:clamp(1rem,4vw,3rem);margin:auto}
+h1{font-size:clamp(2rem,5vw,3rem);line-height:1.1}
+p{max-width:70ch}
+.panel{border:1px solid GrayText;border-radius:1rem;padding:clamp(1rem,3vw,2rem);margin:1.5rem 0;min-width:0}
+select,button{font:inherit;border:1px solid GrayText;border-radius:.6rem;background:Canvas;color:CanvasText;min-height:48px;padding:.6rem 1rem}
+select{width:100%;margin-top:.5rem}
+button{cursor:pointer}
+button:hover{opacity:.8}
+a{color:LinkText}
+:focus-visible{outline:3px solid Highlight;outline-offset:3px}
+.actions{display:flex;flex-wrap:wrap;gap:.7rem}
+.actions button{flex:1 1 10rem}
+[hidden]{display:none!important}
+#status{border-inline-start:4px solid Highlight;padding:.6rem 1rem}
+#status:focus{outline:3px solid Highlight}
+</style>
+<script type="module" src="./src/recovery-ui.mjs"></script>
+</head>
+<body><main>
+<p><a href="./">Back to mobile-first flow kit</a></p>
+<p>Esheen Labs / Original, fictional offline developer example</p>
+<h1>Watch recovery happen.</h1>
+<p>Select a simulated failure and exercise the correct recovery route. The network scenario has two retries after its first attempt; other scenarios require correction. <strong>No HTTP requests, accounts, real inputs or production systems are involved.</strong></p>
+<section class="panel" aria-labelledby="scenario-title">
+<h2 id="scenario-title">1. Choose failure</h2>
+<label for="scenario">Synthetic failure category</label>
+<select id="scenario">
+<option value="network">Network is unavailable</option>
+<option value="validation">Field is invalid</option>
+<option value="conflict">Stale edit conflict</option>
+<option value="empty">Filtered results are empty</option>
+</select>
+</section>
+<section class="panel" aria-labelledby="action-title">
+<h2 id="action-title">2. Simulate and recover</h2>
+<p><strong id="phase">Ready</strong> · <span id="attempts">Attempt 0 of 3 (fictional)</span></p>
+<p role="status" aria-live="polite" tabindex="-1" id="status"></p>
+<div class="actions" aria-label="Simulation controls">
+<button id="start" type="button">Start</button>
+<button id="fail" type="button" hidden>Simulate failure</button>
+<button id="success" type="button" hidden>Simulate success</button>
+<button id="retry" type="button" hidden>Retry</button>
+<button id="fix" type="button" hidden>Correct and try again</button>
+<button id="reset" type="button">Reset</button>
+</div>
+</section>
+<section class="panel"><h2>What this demonstrates</h2><p>A deterministic state machine with explicit transitions, a bounded retry budget, non-destructive failure and visible recovery. It is educational UI, not an HTTP retry client, security control or accessibility certification.</p>
+<p><a href="https://github.com/esheenj/mobile-first-flow-kit-oss">Source, model tests and contributions</a></p></section>
+</main></body></html>

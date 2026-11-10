@@ -87,3 +87,9 @@ Read [AGENTS.md](AGENTS.md), [CONTRIBUTING.md](CONTRIBUTING.md) and the machine-
 - [Mobile-first Flow Kit](https://github.com/esheenj/mobile-first-flow-kit-oss)
 - [Data Table Interactions](https://github.com/esheenj/data-table-interactions-oss)
 - [Design System Foundations](https://github.com/esheenj/design-system-foundations-oss)
+
+## Additional hosted tool: Error Recovery Playground
+
+The [offline Error Recovery Playground](https://esheenj.github.io/mobile-first-flow-kit-oss/recovery.html) is an original educational browser simulation within this existing repository. It models bounded network retries, validation correction, stale-update conflicts and empty results without requests or stored personal data. It does **not** provide real HTTP retry handling or certify accessibility.
+
+Run `node --test tests/recovery.test.mjs` to inspect deterministic state and hostile-input cases; full `npm test` and staged Chrome checks remain required. GitHub Actions publishing and independently observed external HTTPS reachability are separate evidence gates. The source is MIT licensed with invented data and no extra runtime packages.
