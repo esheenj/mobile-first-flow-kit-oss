@@ -1,4 +1,8 @@
-# Mobile-first Flow Kit
+# Mobile Journey Patterns
+
+**Public display name:** **Mobile Journey Patterns**. The underlying **Mobile-first Flow Kit** remains the repository name and source package for compatibility. This free, offline reference demonstrates a fictional three-step mobile journey with predictable state transitions, validation, focus handling and recovery.
+
+**For product designers and frontend developers:** inspect and adapt interaction patterns, not a full CRM journey platform, synthetic-user simulator or accessibility certification. It is independent of the provisional Chimovra commercial brand and contains no connected AI model.
 
 **Support this open-source project (optional):** [Esheen Labs crypto support](https://esheenj.github.io/compound-intelligence-starter/support.html) accepts maintainer-supplied BTC on Bitcoin and USDT on Solana, Ethereum/ERC-20 or Tron/TRC-20. The destination addresses are **custodial Pionex exchange deposits** and may change; check the exact network, current address and minimum before sending. Contributions do not buy priority, access or execution authority. All demos and source remain free.
 
