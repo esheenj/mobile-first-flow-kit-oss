@@ -91,6 +91,80 @@ class MobileFlowBrowserTests(unittest.TestCase):
         expect(self.page.locator("#progress")).to_have_text("Step 1 of 3")
         expect(self.page.locator('input[value="booking"]')).not_to_be_checked()
 
+    def test_reduced_motion_forced_colors_validation_and_reset(self):
+        self.page.set_viewport_size({"width":320,"height":812})
+        self.page.emulate_media(reduced_motion="reduce",forced_colors="active")
+        self.page.reload()
+        media=self.page.evaluate("""() => ({
+          reduced:matchMedia('(prefers-reduced-motion: reduce)').matches,
+          forced:matchMedia('(forced-colors: active)').matches,
+          viewport:innerWidth
+        })""")
+        self.assertEqual(media,{"reduced":True,"forced":True,"viewport":320})
+        primary=self.page.locator("#next")
+        expect(primary).to_be_visible()
+        expect(primary).to_be_enabled()
+        forced=primary.evaluate("""el => {
+          const css=getComputedStyle(el);
+          return {background:css.backgroundColor,foreground:css.color,
+            border:parseFloat(css.borderTopWidth)>0 && css.borderTopStyle!=='none',
+            duration:css.transitionDuration};
+        }""")
+        self.assertNotEqual(forced["background"],forced["foreground"])
+        self.assertTrue(forced["border"])
+        self.assertTrue(all(float(s.strip().removesuffix("s"))==0
+                            for s in forced["duration"].split(",")))
+        # Actual Enter makes focus visibility part of keyboard recovery.
+        primary.press("Enter")
+        radio=self.page.get_by_role("radio",name="Sign-up flow",exact=True)
+        expect(radio).to_be_focused()
+        expect(radio).to_have_attribute("aria-invalid","true")
+        expect(radio).to_have_attribute("aria-describedby","error")
+        expect(self.page.locator("#error")).to_contain_text("Select a template")
+        self.assertTrue(radio.evaluate("""el => {
+          const css=getComputedStyle(el);
+          return css.outlineStyle!=='none' && parseFloat(css.outlineWidth)>0;
+        }"""))
+        self.page.get_by_role("radio",name="Booking flow",exact=True).check()
+        primary.press("Enter")
+        expect(self.page.locator('[data-panel="1"] h2')).to_be_focused()
+        label=self.page.get_by_label("Journey label",exact=True)
+        label.fill("x")
+        primary.press("Enter")
+        expect(label).to_be_focused()
+        expect(label).to_have_attribute("aria-invalid","true")
+        expect(label).to_have_attribute("aria-describedby","label-hint error")
+        expect(self.page.locator("#error")).to_contain_text("between 3 and 50")
+        label.fill("Fictional media preference booking")
+        primary.press("Enter")
+        expect(self.page.locator("#selected-label")).to_have_text(
+            "Fictional media preference booking")
+        expect(self.page.locator("#progress")).to_have_text("Step 3 of 3")
+        self.assertLessEqual(self.page.evaluate("document.documentElement.scrollWidth"),320)
+        primary.press("Enter")
+        expect(self.page.locator('[data-panel="3"] h2')).to_be_focused()
+        expect(self.page.locator("#restart")).to_be_visible()
+        self.page.locator("#restart").press("Enter")
+        expect(self.page.locator("#progress")).to_have_text("Step 1 of 3")
+        expect(self.page.locator('[data-panel="0"] h2')).to_be_focused()
+        expect(self.page.locator("#error")).to_be_empty()
+        self.assertEqual(self.page.locator('input[name="template"]:checked').count(),0)
+        expect(label).to_have_value("")
+        self.assertEqual(self.page.locator('[aria-invalid="true"]').count(),0)
+        # Negative control: preference reset must actually remove emulation.
+        self.page.emulate_media(reduced_motion="no-preference",forced_colors="none")
+        normal=primary.evaluate("""el => ({
+          forced:matchMedia('(forced-colors: active)').matches,
+          reduced:matchMedia('(prefers-reduced-motion: reduce)').matches,
+          background:getComputedStyle(el).backgroundColor,
+          duration:getComputedStyle(el).transitionDuration
+        })""")
+        self.assertFalse(normal["forced"])
+        self.assertFalse(normal["reduced"])
+        self.assertNotEqual(normal["background"],forced["background"])
+        self.assertTrue(any(float(s.strip().removesuffix("s"))>0
+                            for s in normal["duration"].split(",")))
+
     def test_320px_to_desktop_layout_and_no_hidden_panels_in_tab_order(self):
         for width,height in ((320,700),(375,812),(768,1024),(1440,900)):
             with self.subTest(width=width):
