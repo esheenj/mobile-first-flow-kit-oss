@@ -21,3 +21,9 @@ Record the exact commit, device, browser/version, CSS viewport, zoom, keyboard o
 - [ ] Exercise table empty-state recovery and multiple-page navigation.
 
 Publish only checks actually performed. A numeric color calculation, unit test or owner visual acceptance does not establish WCAG conformance.
+
+## 26 November 2026 — staged Chrome media-preference regression
+
+The original synthetic journey passed a combined reduced-motion/forced-colors regression in real Chrome (exact test head `daf643873db86a6440e0e3b6612c84b9f1f6fa05`, [CI 45805716922](https://github.com/esheenj/mobile-first-flow-kit-oss/actions/runs/45805716922)). The test asserts an actual 320px CSS viewport and active media matches, visible/enabled primary control, distinct computed foreground/background and a border, zero transition duration, keyboard-visible focus and error associations after invalid Continue, labelled controls, valid completion and complete reset. A normal-preference negative control verifies inactive media matches, restored transition duration and a changed button background. No rendering correction was necessary.
+
+Reproduce with the existing staged-site `tests/browser_flow.py` command in the workflow, or set `MOBILE_DEMO_ROOT` to an equivalent fresh staged artifact. The test uses Chrome preference emulation; it is **not** Windows High Contrast, a physical phone, a screen-reader observation, browser zoom or WCAG certification. The independent device/AT checks above remain open.
